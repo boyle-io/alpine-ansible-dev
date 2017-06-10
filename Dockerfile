@@ -8,6 +8,7 @@ RUN apk --update add sudo                                         && \
     apk --update add --virtual build-dependencies python-dev libffi-dev openssl-dev build-base  && \
     pip install --upgrade pip cffi  && \
     mkdir -p /soa/apps && \
+    mkdir -p /soamnt/media && \
     cd /soa/apps && \
     git clone https://github.com/ansible/ansible.git --recursive  && \
     cd /soa/apps/ansible && \
