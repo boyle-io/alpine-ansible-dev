@@ -31,8 +31,8 @@ RUN apk --update add --virtual ansible-dependencies\
     pip install -r ./requirements.txt && \
 
     # source ansible
-    echo ". /opt/ansible/hacking/env-setup -q" >> ~/.bashrc && \
-    echo ". /opt/ansible/hacking/env-setup -q" >> /etc/profile && \
+    echo "cd /opt/ansible/ && source hacking/env-setup" >> /etc/profile.d/nve.sh
+    chmod +x /etc/profile.d/nve.sh
 
 
     #cleanup
