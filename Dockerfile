@@ -29,11 +29,4 @@ RUN apk add --no-cache --virtual .remove-deps \
 
     echo "===> Removing package list..."  && \
     #apk del build-dependencies            && \
-    rm -rf /var/cache/apk/*               && \
-
-ONBUILD  RUN  echo "===> Updating TLS certificates..."         && \
-              apk --update add openssl ca-certificates
-
-
-# default command: display Ansible version
-CMD [ "ansible-playbook", "--version" ]
+    rm -rf /var/cache/apk/*
