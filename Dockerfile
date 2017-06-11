@@ -5,8 +5,17 @@ MAINTAINER Ryan Boyle <ryan@boyle.io>
 RUN apk add --no-cache --virtual .remove-deps \
     build-base \
     gcc \
-    abuild \
-    binutils \
+	libc-dev \
+	make \
+	openssl-dev \
+	pcre-dev \
+	zlib-dev \
+	linux-headers \
+	curl \
+	gnupg \
+	libxslt-dev \
+	gd-dev \
+	geoip-dev \
     python \
     py-pip \
     openssl \
