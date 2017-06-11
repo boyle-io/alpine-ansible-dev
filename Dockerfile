@@ -1,14 +1,25 @@
-FROM alpine:3.4
+FROM alpine:3.5
 
 MAINTAINER Ryan Boyle <ryan@boyle.io>
 
-RUN apk --update add sudo                                         && \
-    echo "===> Adding Python runtime..."  && \
-    apk --update add python py-pip openssl ca-certificates git bash  && \
-    apk --update add --virtual build-dependencies python-dev libffi-dev openssl-dev build-base  && \
+RUN apk add --no-cache --virtual .remove-deps \
+    build-base \
+    gcc \
+    abuild \
+    binutils \
+    python \
+    py-pip \
+    openssl \
+    openssl-dev \
+    ca-certificates \
+    git \
+    bash \
+    zip \
+    gcc \
+    python-dev \
+    libffi-dev && \
     pip install --upgrade pip cffi  && \
     mkdir -p /soa/apps && \
-    mkdir -p /soamnt/media && \
     cd /soa/apps && \
     git clone https://github.com/ansible/ansible.git --recursive  && \
     cd /soa/apps/ansible && \
@@ -17,14 +28,8 @@ RUN apk --update add sudo                                         && \
     
 
     echo "===> Removing package list..."  && \
-    apk del build-dependencies            && \
+    #apk del build-dependencies            && \
     rm -rf /var/cache/apk/*               && \
-    \
-    \
-    echo "===> Adding hosts for convenience..."  && \
-    mkdir -p /etc/ansible                        && \
-    echo 'localhost' > /etc/ansible/hosts
-
 
 ONBUILD  RUN  echo "===> Updating TLS certificates..."         && \
               apk --update add openssl ca-certificates
