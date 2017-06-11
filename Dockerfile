@@ -17,9 +17,6 @@ RUN apk --update add --virtual ansible-dependencies\
     git \
     build-base  && \
 
-    # change shell to bash or ansible will fail from packer
-    sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd && \
-
     pip install --upgrade pip cffi  && \
 
     # create dir for ansible.  Will be removed by packer. 
@@ -35,7 +32,9 @@ RUN apk --update add --virtual ansible-dependencies\
 
     # source ansible
     echo ". /opt/ansible/hacking/env-setup -q" >> ~/.bashrc && \
-    
+    echo ". /opt/ansible/hacking/env-setup -q" >> /etc/profile && \
+
+
     #cleanup
     apk del build-dependencies            && \
     rm -rf /var/cache/apk/*
