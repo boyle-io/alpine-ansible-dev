@@ -2,40 +2,37 @@ FROM alpine:3.5
 
 MAINTAINER Ryan Boyle <ryan@boyle.io>
 
-RUN apk add --no-cache --virtual .remove-deps \
-    build-base \
-    gcc \
-	libc-dev \
-	make \
-	openssl-dev \
-	pcre-dev \
-	zlib-dev \
-	linux-headers \
-	curl \
-	gnupg \
-	libxslt-dev \
-	gd-dev \
-	geoip-dev \
+    # add dependencies to be removed by packer
+RUN apk --update add --virtual ansible-dependencies\
     python \
     py-pip \
     openssl \
-    openssl-dev \
-    ca-certificates \
-    git \
     bash \
-    zip \
-    gcc \
+    ca-certificates && \
+    # add dependencies to be removed
+    apk --update add --virtual build-dependencies \
     python-dev \
-    libffi-dev && \
-    pip install --upgrade pip cffi  && \
-    mkdir -p /soa/apps && \
-    cd /soa/apps && \
-    git clone https://github.com/ansible/ansible.git --recursive  && \
-    cd /soa/apps/ansible && \
-    pip install -r ./requirements.txt && \
-    echo ". /soa/apps/ansible/hacking/env-setup -q" >> ~/.bashrc && \
-    
+    libffi-dev \
+    openssl-dev \
+    git \
+    build-base  && \
 
-    echo "===> Removing package list..."  && \
-    #apk del build-dependencies            && \
+    pip install --upgrade pip cffi  && \
+
+    # create dir for ansible.  Will be removed by packer. 
+    mkdir -p /opt && \
+
+    cd /opt && \
+
+    git clone https://github.com/ansible/ansible.git --recursive  && \
+
+    cd /opt/ansible && \
+
+    pip install -r ./requirements.txt && \
+
+    # source ansible
+    echo ". /opt/ansible/hacking/env-setup -q" >> ~/.bashrc && \
+    
+    #cleanup
+    apk del build-dependencies            && \
     rm -rf /var/cache/apk/*
